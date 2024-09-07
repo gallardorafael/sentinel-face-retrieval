@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Any
-
+import numpy.typing as npt
 import numpy as np
 
 class FeatureExtractor(ABC):
@@ -21,11 +21,11 @@ class FeatureExtractor(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def _preprocess(self, image: np.ndarray) -> Any:
+    def _preprocess(self, image: npt.NDArray) -> Any:
         """Performs all preprocessing steps before predicting over an image.
 
         Args:
-            image (np.ndarray): Image to perform preprocessing on.
+            image (npt.NDArray): Image to perform preprocessing on.
 
         Returns:
             Any: An object representing the image as required by the actual model.
@@ -36,14 +36,14 @@ class FeatureExtractor(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def predict(self, image: np.ndarray) -> np.ndarray:
+    def predict(self, image: npt.NDArray) -> npt.NDArray:
         """Extracts embeddings from the given image.
 
         Args:
-            image (np.ndarray): Image to extract features from.
+            image (npt.NDArray): Image to extract features from.
 
         Returns:
-            np.ndarray: A numpy array containing the extracted embeddings.
+            npt.NDArray: A numpy array containing the extracted embeddings.
 
         Raises:
             NotImplementedError: If the method is not implemented in a subclass.
