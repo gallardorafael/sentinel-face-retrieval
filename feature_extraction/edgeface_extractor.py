@@ -62,7 +62,8 @@ class EdgeFaceFeatureExtractor(FeatureExtractor):
         return preprocessed_image
 
     def predict(self, image: npt.NDArray) -> npt.NDArray:
-        """Predicts the embeddings for the given image.
+        """Predicts the embeddings for the given image. Note that the image is expected to be a
+        crop of a face, since this model is not responsible for face detection.
 
         Args:
             image (npt.NDArray): The input image, with shape (H, W, C).
