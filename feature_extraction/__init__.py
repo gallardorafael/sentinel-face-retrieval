@@ -1,1 +1,2 @@
 from .edgeface_extractor import EdgeFaceFeatureExtractor
+from .feature_extractor import FeatureExtractor
