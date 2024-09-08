@@ -9,12 +9,7 @@ from rich.progress import track
 
 from feature_extraction import EdgeFaceFeatureExtractor, FeatureExtractor
 
-MILVUS_DEFAULT_URI = "http://localhost:19530"
-MILVUS_DEFAULT_DB_NAME = "default"
-DEFAULT_COLLECTION_NAME = "test_collection"
-EDGE_FACE_DIM = 512
-DEFAULT_VECTOR_FIELD_NAME = "embedding"
-DEFAULT_METRIC = "COSINE"
+from .defaults import *
 
 logger = logging.getLogger(__name__)
 
@@ -119,6 +114,7 @@ def insert_lfw_data(
 
 
 def main():
+    """Main function to run the insert operation of all the data into Milvus."""
     args = parse_args()
     logger.info("Running insert operation with arguments: %s" % pprint.pp(args))
 
