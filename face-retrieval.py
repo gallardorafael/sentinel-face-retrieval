@@ -12,21 +12,39 @@ logging.basicConfig(level=logging.INFO)
 
 st.set_page_config(layout="wide")
 
+from face_detection import YOLOv6FaceDetector
 from feature_extraction import EdgeFaceFeatureExtractor
 from vector_store import MilvusFaceRetriever
 
-
-def _recommended_box2(img: Image, aspect_ratio: tuple) -> dict:
-    width, height = img.size
-    return {
-        "left": int(0),
-        "top": int(0),
-        "width": int(width - 2),
-        "height": int(height - 2),
-    }
+# creating a global default face detector, this must be global
+# because the _recommended_box signature is defined
+# and does not allow for extra parameters
+face_detector = YOLOv6FaceDetector()
 
 
-streamlit_cropper._recommended_box = _recommended_box2
+def _recommended_bbox_yolo(img: Image, aspect_ratio: tuple, **kwargs) -> dict:
+    """Returns the recommended bounding box for the cropper based on the face detector.
+
+    Args:
+        img: The image to be processed.
+        aspect_ratio: The aspect ratio of the cropper.
+    Returns:
+        dict: The recommended bounding box. The keys are 'left', 'top', 'width', and 'height'.
+    """
+    cv2_img = pil_to_cv2(img)
+    # the detector returns all the faces in the image, here we assuming only 1 face
+    # so we only work with the first element in the list
+    detections = face_detector.predict(cv2_img)
+    if len(detections) == 0:
+        return {"left": 0, "top": 0, "width": int(img.width - 2), "height": (img.height - 2)}
+
+    # converting the bbox to the format expected by the cropper
+    left, top, right, bottom = detections[0].bbox
+
+    return {"left": left, "top": top, "width": (right - left), "height": (bottom - top)}
+
+
+streamlit_cropper._recommended_box = _recommended_bbox_yolo
 
 # logo
 st.sidebar.image("assets/sentinel_logo_white.png", use_column_width="always")
