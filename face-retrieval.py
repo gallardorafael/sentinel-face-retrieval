@@ -91,6 +91,8 @@ if uploaded_file is not None:
 
     # getting hits
     results = retriever.get_search_hits(face_crop=pil_to_cv2(cropped_img))
+    # skipping the query image if it is in the db
+    results = [result for result in results if result["similarity"] <= 0.99]
 
     for i, info in enumerate(results):
         imgName = info["filename"]
