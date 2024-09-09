@@ -12,6 +12,8 @@ logger = logging.getLogger(__name__)
 
 
 class FaceHit(TypedDict):
+    """A dictionary containing the person's name, similarity score, and filename."""
+
     person_name: str
     similarity: float
     filename: str
