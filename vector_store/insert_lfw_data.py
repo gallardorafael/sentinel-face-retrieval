@@ -7,6 +7,7 @@ import cv2
 from pymilvus import MilvusClient
 from rich.progress import track
 
+from face_detection import YOLOv6FaceDetector
 from feature_extraction import EdgeFaceFeatureExtractor, FeatureExtractor
 
 from .defaults import *
@@ -80,6 +81,7 @@ def insert_lfw_data(
     collection_name: str,
     vector_field_name: str,
     feature_extractor: FeatureExtractor,
+    face_detector: "Detector",
 ) -> None:
     """Inserts the data from a given path into the collection. The data is expected to be in the
     LFW format.
@@ -101,6 +103,15 @@ def insert_lfw_data(
     ):
         # read image
         image = cv2.imread(str(image_path))
+        # detect face and crop it
+        faces = face_detector.predict(image)
+        if len(faces) == 0:
+            continue
+
+        # assuming only 1 face per image
+        left, top, right, bottom = faces[0].bbox
+        image = image[top:bottom, left:right]
+
         # extract embeddings
         embeddings = feature_extractor.predict(image)
         # insert into collection
@@ -138,6 +149,9 @@ def main():
         delete_existing_collection=args.delete_existing_collection,
     )
 
+    # creating a face detector
+    face_detector = YOLOv6FaceDetector()
+
     # inserting data from the LFW dataset
     insert_lfw_data(
         data_path=Path(args.data_path),
@@ -145,6 +159,7 @@ def main():
         collection_name=args.collection_name,
         vector_field_name=DEFAULT_VECTOR_FIELD_NAME,
         feature_extractor=extractor,
+        face_detector=face_detector,
     )
 
 
