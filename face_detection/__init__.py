@@ -1,0 +1,1 @@
+from .yolov6_face_detector import YOLOv6FaceDetector
