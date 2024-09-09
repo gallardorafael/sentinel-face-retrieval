@@ -1,0 +1,4 @@
+[server]
+runOnSave = true
+headless = true
+maxUploadSize = 10
