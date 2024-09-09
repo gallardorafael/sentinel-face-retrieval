@@ -20,11 +20,11 @@ def parse_args():
     parser.add_argument(
         "--data_path", type=str, help="Path to the root folder of the data", required=True
     )
-    parser.add_argument("--uri", type=str, default=MILVUS_DEFAULT_URI, help="Host of Milvus server")
+    parser.add_argument("--uri", type=str, default=MILVUS_URI, help="Host of Milvus server")
     parser.add_argument(
-        "--collection_name", type=str, default=DEFAULT_COLLECTION_NAME, help="Collection name"
+        "--collection_name", type=str, default=MILVUS_DB_NAME, help="Collection name"
     )
-    parser.add_argument("--db_name", type=str, default=MILVUS_DEFAULT_DB_NAME, help="Database name")
+    parser.add_argument("--db_name", type=str, default=MILVUS_COLLECTION_NAME, help="Database name")
     parser.add_argument(
         "--dimension", type=int, default=EDGE_FACE_DIM, help="Dimension of the vectors"
     )
@@ -84,6 +84,10 @@ def insert_lfw_data(
     """Inserts the data from a given path into the collection. The data is expected to be in the
     LFW format.
 
+    The LFW dataset has a folder for each person, that contains all the images for that individual. This function
+    only "inserts" the person_name/filename into the collection, which means that, for retrieval/searching, you will
+    need to append the 'filename' in the collection to the root path of the LFW dataset.
+
     Args:
         data_path (Path): Path to the root folder of the data.
         client: MilvusClient object.
@@ -105,7 +109,7 @@ def insert_lfw_data(
             collection_name=collection_name,
             data=[
                 {
-                    "filename": f"{person_name}/{image_path.name}",
+                    "filename": image_path.as_posix(),
                     "name": person_name,
                     vector_field_name: embeddings,
                 }
