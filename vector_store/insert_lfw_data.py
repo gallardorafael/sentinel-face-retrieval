@@ -22,9 +22,9 @@ def parse_args():
     )
     parser.add_argument("--uri", type=str, default=MILVUS_URI, help="Host of Milvus server")
     parser.add_argument(
-        "--collection_name", type=str, default=MILVUS_DB_NAME, help="Collection name"
+        "--collection_name", type=str, default=MILVUS_COLLECTION_NAME, help="Collection name"
     )
-    parser.add_argument("--db_name", type=str, default=MILVUS_COLLECTION_NAME, help="Database name")
+    parser.add_argument("--db_name", type=str, default=MILVUS_DB_NAME, help="Database name")
     parser.add_argument(
         "--dimension", type=int, default=EDGE_FACE_DIM, help="Dimension of the vectors"
     )
