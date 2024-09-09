@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Any
+
 import numpy.typing as npt
-import numpy as np
+
 
 class FeatureExtractor(ABC):
     """Abstract base class for image feature extractors.

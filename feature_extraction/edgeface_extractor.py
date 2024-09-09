@@ -30,7 +30,8 @@ class EdgeFaceFeatureExtractor(FeatureExtractor):
         self._init_model(model_path=model_path)
 
     def _init_model(self, model_path: str) -> None:
-        """Initializes the ONNX model by loading it from the provided model path.
+        """Initializes the ONNX model by loading it from the provided model path. The model is
+        initialized as an onnxruntime InferenceSession object.
 
         Args:
             model_path (str): Path to the ONNX model file.
