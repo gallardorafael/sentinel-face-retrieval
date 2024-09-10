@@ -1,0 +1,4 @@
+services:
+  sentinel-face-retrieval:
+    volumes:
+      - "/your/path/to/images:/your/path/to/image"
