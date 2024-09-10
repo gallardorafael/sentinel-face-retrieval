@@ -101,3 +101,8 @@ if uploaded_file is not None:
         cols[i % 5].image(img, use_column_width=True)
         if show_distance:
             cols[i % 5].write(f"Similarity confidence: {score:.3f}")
+
+"""
+This Streamlit app is based on the great bootcamp tutorial from
+the Milvus team: https://github.com/milvus-io/bootcamp/tree/master/bootcamp/tutorials/quickstart/apps/image_search_with_milvus
+"""
