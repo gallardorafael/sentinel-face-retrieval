@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Union
 
 import numpy as np
 import numpy.typing as npt
@@ -84,7 +84,7 @@ class YOLOv6FaceDetector(Detector):
         detections,
         original_img_shape: Tuple[int, int],
         confidence_thresh: float = 0.3,
-    ):
+    ) -> List[Dict[str, Union[List[int], float, str, List[int]]]]:
         nms_results = non_max_suppression(
             detections,
             conf_thres=confidence_thresh,
@@ -92,6 +92,9 @@ class YOLOv6FaceDetector(Detector):
             extra_data=10,
             max_det=100,
         )[0]
+
+        if len(nms_results) == 0:
+            return []
 
         # # reescaling face bboxes
         nms_results[:, :4] = scale_coords(self.input_shape, nms_results[:, :4], original_img_shape)
