@@ -21,6 +21,9 @@ def parse_args():
     parser.add_argument(
         "--data_path", type=str, help="Path to the root folder of the data", required=True
     )
+    parser.add_argument(
+        "--data_type", type=str, default="lfw", help="Dataset to be inserted", choices=["lfw"]
+    )
     parser.add_argument("--uri", type=str, default=MILVUS_URI, help="Host of Milvus server")
     parser.add_argument(
         "--collection_name", type=str, default=MILVUS_COLLECTION_NAME, help="Collection name"
@@ -61,6 +64,7 @@ def create_collection(
                 "Inserting data into an existing collection %s, run the script with the flag --delete_existing_collection for a fresh collection with the same name (destroying the existing one)."
                 % collection_name
             )
+            return
         else:
             client.drop_collection(collection_name=collection_name)
             logger.info("Collection %s dropped." % collection_name)
@@ -153,14 +157,17 @@ def main():
     face_detector = YOLOv6FaceDetector()
 
     # inserting data from the LFW dataset
-    insert_lfw_data(
-        data_path=Path(args.data_path),
-        client=client,
-        collection_name=args.collection_name,
-        vector_field_name=DEFAULT_VECTOR_FIELD_NAME,
-        feature_extractor=extractor,
-        face_detector=face_detector,
-    )
+    if args.data_type == "lfw":
+        insert_lfw_data(
+            data_path=Path(args.data_path),
+            client=client,
+            collection_name=args.collection_name,
+            vector_field_name=DEFAULT_VECTOR_FIELD_NAME,
+            feature_extractor=extractor,
+            face_detector=face_detector,
+        )
+    else:
+        raise ValueError("Invalid dataset type")
 
 
 if __name__ == "__main__":
