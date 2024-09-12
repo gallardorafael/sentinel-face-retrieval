@@ -4,6 +4,8 @@ SENTINEL Face Retrieval is an image similarity search system that allows for ext
 
 Note: While SENTINEL Face Retrieval is optimized to work on CPU-only machines, and it would be certainly faster with GPUs, the application is extremely fast, check the Performance section.
 
+Demo video:
+
 https://github.com/user-attachments/assets/966ac025-0a7b-4ba6-9e6b-0d48fb92c51c
 
 ### Architecture
