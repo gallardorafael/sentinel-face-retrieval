@@ -16,10 +16,23 @@ from face_detection import YOLOv6FaceDetector
 from feature_extraction import EdgeFaceFeatureExtractor
 from vector_store import MilvusFaceRetriever
 
+
+@st.cache_resource
+def init_face_detector():
+    return YOLOv6FaceDetector()
+
+
+@st.cache_resource
+def init_retriever():
+    return MilvusFaceRetriever(
+        feature_extractor=EdgeFaceFeatureExtractor(), similarity_threshold=0.5
+    )
+
+
 # creating a global default face detector, this must be global
 # because the _recommended_box signature is defined
 # and does not allow for extra parameters
-face_detector = YOLOv6FaceDetector()
+face_detector = init_face_detector()
 
 
 def _recommended_bbox_yolo(img: Image, aspect_ratio: tuple, **kwargs) -> dict:
@@ -53,9 +66,7 @@ st.sidebar.image("assets/sentinel_logo_white.png", use_column_width="always")
 st.title("SENTINEL Face Retrieval")
 
 # create a MilvusFaceRetriever object and FeatureExtractor object
-retriever = MilvusFaceRetriever(
-    feature_extractor=EdgeFaceFeatureExtractor(), similarity_threshold=0.5
-)
+retriever = init_retriever()
 
 cols = st.columns(5)
 
